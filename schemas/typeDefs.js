@@ -40,8 +40,8 @@ const typeDefs = gql`
     date: String!
     time: String!
     city: String!
-    profileImage: String
-    additionalImages: [String]
+    address: String!
+    images: [String]
     eventType: String
     tags: [String]
     price: Float!
@@ -54,6 +54,7 @@ const typeDefs = gql`
     attendees: [User]
     isVIP: Boolean
     tickets: [Ticket]
+    soldTickets: Int
   }
 
   # ticket
@@ -75,6 +76,11 @@ const typeDefs = gql`
     voiceMessage: String
     emoji: String
   }
+  # chat
+    type Chat {
+        id: ID!
+        users: [User]!
+        messages: [Message]!
 
   # query
   type Query {
@@ -83,7 +89,7 @@ const typeDefs = gql`
     events: [Event]
     event(id: ID!): Event
     chat(id: ID!): Chat
-    messages: [Message]
+    messages(chatID!: ID!): [Message]
   }
 
   # mutation type for updating data (create, update, delete)
@@ -95,17 +101,20 @@ updateUser(name: String, email: String, password: String, city: String, state: S
 upcomingEvents: [Event]  ): User
 deleteUser(id: ID!): User
 
+# event
+
+# purchaseTicket(eventID: ID!, ticketType: String!): Event
+meetYourMatches(eventID: ID!): [User]
+
  # message
 
-addMessage(sender: ID!, message: String!, timestamp: String, isRead: Boolean, attachment: String, media: String, voiceMessage: String, emoji: String): Message
-updateMessage(message: String, emoji: String): Message
+createChat(userIds: [ID]!): Chat
+addMessage(chatId: ID!, senderId: ID!, message: String!, attachment: String, media: String, voiceMessage: String, emoji: String): Message
+updateMessage(id: ID!, message: String, emoji: String): Message
 deleteMessage(id: ID!): Message
 
- # event
 
 
-
-# events (attendance status)
    }
 `;
 
