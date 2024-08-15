@@ -19,21 +19,5 @@ const resolvers = {
     events: async(parent, args, context),
   },
 };
-// mutation type for updating data (create, update, delete)
-// type Mutation: {
-// create a new user
-
-// update user profile
-
-// delete user account
-
-// create message
-
-// update message
-
-// delete message
-
-//  events (attendance status)
-// }
 
 module.exports = resolvers;
