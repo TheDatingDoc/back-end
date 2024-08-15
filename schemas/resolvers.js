@@ -1,9 +1,12 @@
-const { User, Chat, Event } = require("../models");
+const { User, Chat, MessageModel, Event } = require("../models");
 const { signToken, AuthenticationError } = require("../utils/auth");
 
 const resolvers = {
-  // query type for getting data
+  //---------------------------------------------------- QUERY --------------------------------------------------------//
   Query: {
+    //---------------------- get all users ----------------------//
+
+    //---------------------- get one user ----------------------//
     user: async (parent, args, context) => {
       if (context.user) {
         const userData = await User.findOne({ _id: context.user._id })
@@ -15,8 +18,22 @@ const resolvers = {
       }
       throw AuthenticationError;
     },
-    // get all events
+    //---------------------- get all events ----------------------//
     events: async(parent, args, context),
+    //---------------------- get one event ----------------------//
+    //---------------------- get all chats ----------------------//
+    //---------------------- get one chat ----------------------//
+  },
+
+  //------------------------------------------------- MUTATIONS -----------------------------------------------------//
+  Mutation: {
+    //---------------------- add user ----------------------//
+    //---------------------- login ----------------------//
+    //---------------------- update user ----------------------//
+    //---------------------- delete user ----------------------//
+    //---------------------- create message ----------------------//
+    //---------------------- update message ----------------------//
+    //---------------------- delete message ----------------------//
   },
 };
 
