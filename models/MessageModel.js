@@ -24,6 +24,16 @@ const messageSchema = new mongoose.Schema({
   },
 
   // potential future features (media attachments, voice message, emoji, etc.)
+
+  media: {
+    type: String,
+  },
+  voiceMessage: {
+    type: String,
+  },
+  emoji: {
+    type: String,
+  },
 });
 
 messageSchema.index({ sender: 1, receiver: 1 });

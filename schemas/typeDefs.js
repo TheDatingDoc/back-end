@@ -49,6 +49,10 @@ const typeDefs = gql`
     message: String!
     timestamp: String
     isRead: Boolean
+    attachment: String
+    media: String
+    voiceMessage: String
+    emoji: String
   }
 
   # query
@@ -59,25 +63,6 @@ const typeDefs = gql`
     event(id: ID!): Event
     messages: [Message]
   }
-
-# mutation type for updating data (create, update, delete)
-type Mutation {
-# create a new user
-
-# update user profile
-
-# delete user account
-
-# create message
-
-# update message
-
-# delete message
-
-# events (attendance status)
-}
-
-
 `;
 
 module.exports = typeDefs;

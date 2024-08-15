@@ -6,10 +6,12 @@ const eventSchema = new Schema(
       type: String,
       required: true,
     },
+
     description: {
       type: String,
       required: true,
     },
+
     date: {
       type: Date,
       required: true,
@@ -24,6 +26,21 @@ const eventSchema = new Schema(
     },
     image: {
       type: String,
+    },
+    eventType: {
+      type: String,
+      enum: ["VIP", "Fitness", "Online", "Signature", "Workshop"],
+    },
+    tags: {
+      type: [String],
+    },
+    price: {
+      type: Number,
+    },
+    status: {
+      type: String,
+      enum: ["Upcoming", "Past", "Canceled"],
+      default: "Upcoming",
     },
     maxParticipants: {
       type: Number,
