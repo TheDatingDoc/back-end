@@ -115,7 +115,7 @@ createChat(userIds: [ID]!): Chat
 addMessage(chatId: ID!, senderId: ID!, message: String!, attachment: String, media: String, voiceMessage: String, emoji: String): Message
 updateMessage(id: ID!, message: String, emoji: String): Message
 deleteMessage(id: ID!): Message
-blockUser(chatId: ID!, userId: ID!): Chat
+# blockUser(chatId: ID!, userId: ID!): Chat
 # linkUp(chatId: ID!, userId: ID!): String
    }
 `;
