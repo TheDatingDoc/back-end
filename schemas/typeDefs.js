@@ -88,7 +88,7 @@ const typeDefs = gql`
 
   # mutation type for updating data (create, update, delete)
    type Mutation: {
- #user
+ # user
 addUser(name: String!, email: String!, password: String!, city: String, state: String!, gender: String!, interestedIn: String!, profileImage: String! ): Auth
 login(email: String!, password: String!): Auth
 updateUser(name: String, email: String, password: String, city: String, state: String, jobTitle: String, bio: String, gender: String, interestedIn: String, profileImage: String, additionalImages: [String], interests: [String], personalityTraits: String, metatags: [String], loveLanguage: [String], bestFeature: String, socialCircle: String, lookingFor: String, basicInfo: [String], proMember: Boolean, attendedEvents: [Event]
@@ -102,7 +102,7 @@ updateMessage(message: String, emoji: String): Message
 deleteMessage(id: ID!): Message
 
  # event
- 
+
 
 
 # events (attendance status)
