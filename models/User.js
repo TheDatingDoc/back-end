@@ -30,7 +30,6 @@ const userSchema = new Schema(
     },
     bio: {
       type: String,
-      required: true,
     },
     gender: {
       type: String,
@@ -109,9 +108,20 @@ const userSchema = new Schema(
     },
     proMember: {
       type: Boolean,
-      required: true,
       default: false,
     },
+    attendedEvents: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Event",
+      },
+    ],
+    upcomingEvents: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Event",
+      },
+    ],
   },
   {
     toJSON: {

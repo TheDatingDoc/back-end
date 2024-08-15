@@ -20,7 +20,7 @@ const eventSchema = new Schema(
       type: String,
       required: true,
     },
-    location: {
+    city: {
       type: String,
       required: true,
     },
@@ -36,6 +36,7 @@ const eventSchema = new Schema(
     },
     price: {
       type: Number,
+      default: 0,
     },
     status: {
       type: String,
@@ -46,10 +47,52 @@ const eventSchema = new Schema(
       type: Number,
       required: true,
     },
+    maxMaleParticipants: {
+      type: Number,
+      required: true,
+    },
+    maxFemaleParticipants: {
+      type: Number,
+      required: true,
+    },
+    soldMaleTickets: {
+      type: Number,
+      default: 0,
+    },
+    soldFemaleTickets: {
+      type: Number,
+      default: 0,
+    },
+
     attendees: [
       {
         type: Schema.Types.ObjectId,
         ref: "User",
+      },
+    ],
+    isVIP: {
+      type: Boolean,
+      default: false,
+    },
+    soldTickets: {
+      type: Number,
+      default: 0,
+    },
+    tickets: [
+      {
+        buyer: {
+          type: Schema.Types.ObjectId,
+          ref: "User",
+          required: true,
+        },
+        ticketType: {
+          type: String,
+          enum: ["Male", "Female"],
+        },
+        purchaseDate: {
+          type: Date,
+          default: Date.now,
+        },
       },
     ],
   },
@@ -61,7 +104,15 @@ const eventSchema = new Schema(
   }
 );
 
-eventSchema.virtual("attendees").get(function () {
+eventSchema.virtual("availableMaleTickets").get(function () {
+  return this.maxMaleParticipants - this.soldMaleTickets;
+});
+
+eventSchema.virtual("availableFemaleTickets").get(function () {
+  return this.maxFemaleParticipants - this.soldMaleTickets;
+});
+
+eventSchema.virtual("attendeeCount").get(function () {
   return this.attendees.length;
 });
 

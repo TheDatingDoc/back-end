@@ -1,4 +1,4 @@
-const { User, Message, Event } = require("../models");
+const { User, Chat, Event } = require("../models");
 const { signToken, AuthenticationError } = require("../utils/auth");
 
 const resolvers = {
@@ -9,11 +9,14 @@ const resolvers = {
         const userData = await User.findOne({ _id: context.user._id })
           .select("-__v -password")
           .populate("messages")
-          .populate("events");
+          .populate("attendedEvents")
+          .populate("upcomingEvents");
         return userData;
       }
       throw AuthenticationError;
     },
+    // get all events
+    events: async(parent, args, context),
   },
 };
 // mutation type for updating data (create, update, delete)

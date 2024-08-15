@@ -18,12 +18,14 @@ const typeDefs = gql`
     interests: [String]
     personalityTraits: String
     metatags: [String]
-    loveLanguage: String
+    loveLanguage: [String]
     bestFeature: String
     socialCircle: String
     lookingFor: String
-    basicInfo: String
+    basicInfo: [String]
     proMember: Boolean
+    attendedEvents: [Event]
+    upcomingEvents: [Event]
   }
 
   type Auth {
@@ -37,7 +39,7 @@ const typeDefs = gql`
     description: String!
     date: String!
     time: String!
-    location: String!
+    city: String!
     image: String
     maxParticipants: Int!
     attendees: [User]
