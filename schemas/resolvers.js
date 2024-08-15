@@ -4,25 +4,43 @@ const { signToken, AuthenticationError } = require("../utils/auth");
 const resolvers = {
   //---------------------------------------------------- QUERY --------------------------------------------------------//
   Query: {
-    //---------------------- get all users ----------------------//
-
     //---------------------- get one user ----------------------//
-    user: async (parent, args, context) => {
-      if (context.user) {
-        const userData = await User.findOne({ _id: context.user._id })
-          .select("-__v -password")
-          .populate("messages")
-          .populate("attendedEvents")
-          .populate("upcomingEvents");
-        return userData;
-      }
-      throw AuthenticationError;
+    user: async (_, { id }) => {
+      return User.findById(id);
     },
     //---------------------- get all events ----------------------//
-    events: async(parent, args, context),
+    events: async () => {
+      return Event.find();
+    },
     //---------------------- get one event ----------------------//
+    event: async (_, { id }) => {
+      return Event.findById(id);
+    },
+    //---------------------- my matches ----------------------//
+    myMatches: async (_, { eventId }, { user }) => {
+      if (!user) {
+        throw new AuthenticationError(
+          "You need to be logged in to view matches!"
+        );
+      }
+      const event = await Event.findById(eventId).populate("attendees");
+      return event.attendees.filter(
+        (attendee) => attendee._id.toString() !== user._id.toString()
+      );
+    },
     //---------------------- get all chats ----------------------//
+    chat: async (_, { id }) => {
+      return Chat.findById(id)
+        .populate("users")
+        .populate({
+          path: "messages",
+          populate: { path: "sender" },
+        });
+    },
     //---------------------- get one chat ----------------------//
+    messages: async (_, { chatId }) => {
+      return Message.find({ chat: chatId }).populate("sender");
+    },
   },
 
   //------------------------------------------------- MUTATIONS -----------------------------------------------------//

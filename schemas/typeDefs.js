@@ -88,6 +88,7 @@ const typeDefs = gql`
     user(id: ID!): User
     events: [Event]
     event(id: ID!): Event
+    myMatches(eventId: ID!): [User]
     chat(id: ID!): Chat
     messages(chatID!: ID!): [Message]
   }
@@ -104,6 +105,8 @@ deleteUser(id: ID!): User
 # event
 
 # purchaseTicket(eventID: ID!, ticketType: String!): Event
+
+
 meetYourMatches(eventID: ID!): [User]
 
  # message
@@ -112,9 +115,8 @@ createChat(userIds: [ID]!): Chat
 addMessage(chatId: ID!, senderId: ID!, message: String!, attachment: String, media: String, voiceMessage: String, emoji: String): Message
 updateMessage(id: ID!, message: String, emoji: String): Message
 deleteMessage(id: ID!): Message
-
-
-
+blockUser(chatId: ID!, userId: ID!): Chat
+# linkUp(chatId: ID!, userId: ID!): String
    }
 `;
 
