@@ -1,35 +1,35 @@
-const express = require("express");
+// const express = require("express");
+// const { expressMiddleware } = require("@apollo/server/express4");
 const { ApolloServer } = require("@apollo/server");
-const { expressMiddleware } = require("@apollo/server-express4");
+const { startStandaloneServer } = require("@apollo/server/standalone");
 const { authMiddleware } = require("./utils/auth");
 const { typeDefs, resolvers } = require("./schemas");
 const db = require("./config/connection");
 
+// socket.io - chat
+// const server = http.createServer(app);
+// const { Server } = require("socket.io");
+// const io = new Server(server);
+
 const PORT = process.env.PORT || 3000;
-const app = express();
+// const app = express();
+
+// Instantiate Apollo Server
 const server = new ApolloServer({
   typeDefs,
   resolvers,
 });
 
+// Function to start Apollo Server standalone
 const startApolloServer = async () => {
-  await server.start();
-
-  app.use(express.urlencoded({ extended: true }));
-  app.use(express.json());
-
-  app.use(
-    "/graphql",
-    expressMiddleware(server, {
-      context: authMiddleware,
-    })
-  );
-
-  db.once("open", () => {
-    app.listen(PORT, () => {
-      console.log(`API server running on port ${PORT}!`);
-      console.log(`Use GraphQL at http://localhost:${PORT}/graphql`);
+  db.once("open", async () => {
+    // Start Apollo Server with standalone mode
+    const { url } = await startStandaloneServer(server, {
+      context: async ({ req }) => authMiddleware({ req }),
+      listen: { port: PORT },
     });
+
+    console.log(`🚀 Server ready at ${url}`);
   });
 };
 

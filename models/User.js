@@ -131,6 +131,20 @@ const userSchema = new Schema(
   }
 );
 
+// hash the password before saving the user
+userSchema.pre("save", async function (next) {
+  if (this.isModified("password") || this.isNew) {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+  }
+  next();
+});
+
+// compare the provided password with the stored hashed password
+userSchema.methods.isCorrectPassword = async function (password) {
+  return bcrypt.compare(password, this.password);
+};
+
 const User = model("User", userSchema);
 
 module.exports = User;

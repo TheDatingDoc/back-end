@@ -1,5 +1,6 @@
 const { User, Chat, MessageModel, Event } = require("../models");
-const { signToken, AuthenticationError } = require("../utils/auth");
+const { signToken } = require("../utils/auth");
+const { GraphQLError } = require("graphql");
 
 const resolvers = {
   //---------------------------------------------------- QUERY --------------------------------------------------------//
@@ -19,9 +20,7 @@ const resolvers = {
     //---------------------- my matches ----------------------//
     myMatches: async (_, { eventId }, { user }) => {
       if (!user) {
-        throw new AuthenticationError(
-          "You need to be logged in to view matches!"
-        );
+        throw new GraphQLError("You need to be logged in to view matches!");
       }
       const event = await Event.findById(eventId).populate("attendees");
       return event.attendees.filter(
@@ -60,20 +59,23 @@ const resolvers = {
         interestedIn,
         profileImage,
       });
+      console.log(user);
       const token = signToken(user);
-      return { token, user };
+      return { token, user: { ...user._doc, id: user._id } };
     },
     //---------------------- login ----------------------//
     login: async (_, { email, password }) => {
       const user = await User.findOne({ email });
+      // check if user exists
       if (!user) {
-        throw AuthenticationError;
+        throw new GraphQLError("Incorrect email or password!");
       }
-      // await correct password from user
+      // await password from user
       const correctPw = await user.isCorrectPassword(password);
       // check if password matches user
       if (!correctPw) {
-        throw AuthenticationError;
+        console.log("Incorrect password");
+        throw new GraphQLError("Incorrect email or password!");
       }
       // assign token to user
       const token = signToken(user);
@@ -84,17 +86,18 @@ const resolvers = {
 
     updateUser: async (_, args, { user }) => {
       if (!user) {
-        throw new AuthenticationError("You need to be logged in!");
+        throw new GraphQLError("You need to be logged in!");
       }
-      const updateUser = await User.findByIdAndUpdate(user._id, args, {
+      // proceed with updating the user
+      const updatedUser = await User.findByIdAndUpdate(user._id, args, {
         new: true,
       });
-      return updateUser;
+      return updatedUser;
     },
     //---------------------- delete user profile ----------------------//
     deleteUser: async (_, { id }, { user }) => {
       if (!user || user._id.toString() !== id) {
-        throw new AuthenticationError("You can only delete your own profile!");
+        throw new GraphQLError("You can only delete your own profile!");
       }
       const deleteUser = await User.findByIdAndDelete(id);
       return deleteUser;
@@ -102,7 +105,7 @@ const resolvers = {
     //---------------------- purchase ticket ----------------------//
     purchaseTicket: async (_, { eventId, ticketType }, { user }) => {
       if (!user) {
-        throw new AuthenticationError(
+        throw new GraphQLError(
           "You need to be logged in to purchase a ticket!"
         );
       }
@@ -127,9 +130,7 @@ const resolvers = {
 
     createChat: async (_, { userIds }, { user }) => {
       if (!user) {
-        throw new AuthenticationError(
-          "You need to be logged in to create a chat!"
-        );
+        throw new GraphQLError("You need to be logged in to create a chat!");
       }
       userIds.push(user._id); // add current user to chat
       const chat = await Chat.create({ users: userIds });
@@ -142,15 +143,13 @@ const resolvers = {
       { user }
     ) => {
       if (!user || user._id.toString() !== senderId) {
-        throw new AuthenticationError(
-          "You need to be logged in to send a message!"
-        );
+        throw new GraphQLError("You need to be logged in to send a message!");
       }
       const chat = await Chat.findById(chatId);
       if (!chat) {
         throw new Error("Chat not found!");
       }
-      const newMessage = await Message.create({
+      const newMessage = await MessageModel.create({
         sender: senderId,
         message,
         attachment,
@@ -165,12 +164,12 @@ const resolvers = {
     },
     //---------------------- update message ----------------------//
     updateMessage: async (_, { id, message, emoji }, { user }) => {
-      const existingMessage = await Message.findById(id);
+      const existingMessage = await MessageModel.findById(id);
       if (
         !existingMessage ||
         existingMessage.sender.toString() !== user._id.toString()
       ) {
-        throw new AuthenticationError("You can only update your own messages!");
+        throw new GraphQLError("You can only update your own messages!");
       }
       existingMessage.message = message || existingMessage.message;
       existingMessage.emoji = emoji || existingMessage.emoji;
@@ -179,15 +178,15 @@ const resolvers = {
     },
     //---------------------- delete message ----------------------//
     deleteMessage: async (_, { id }, { user }) => {
-      const message = await Message.findById(id);
+      const message = await MessageModel.findById(id);
       if (!message || message.sender.toString() !== user._id.toString()) {
-        throw new AuthenticationError("You can only delete your own messages!");
+        throw new GraphQLError("You can only delete your own messages!");
       }
-      await Message.findByIdAndDelete(id);
+      await MessageModel.findByIdAndDelete(id);
       return message;
     },
     // block user from chat
-    // linkUp
+    // linkp
   },
 };
 
