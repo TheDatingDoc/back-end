@@ -17,6 +17,18 @@ const resolvers = {
     event: async (_, { id }) => {
       return Event.findById(id);
     },
+    // ---------------------- my events ----------------------//
+    myEvents: async (_, __, { user }) => {
+      if (!user) {
+        throw new GraphQLError("You need to be logged in to view your events!");
+      }
+      const attendedEvents = await Event.find({ $in: user.attendedEvents });
+      const upcomingEvents = await Event.find({ $in: user.upcomingEvents });
+      return {
+        attendedEvents: attendedEvents,
+        upcomingEvents: upcomingEvents,
+      };
+    },
     //---------------------- my matches ----------------------//
     myMatches: async (_, { eventId }, { user }) => {
       if (!user) {
