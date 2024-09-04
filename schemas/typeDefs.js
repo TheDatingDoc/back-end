@@ -88,6 +88,7 @@ const typeDefs = gql`
     user(id: ID!): User
     events: [Event]
     event(id: ID!): Event
+    myEvents: User
     myMatches(eventId: ID!): [User]
     chat(id: ID!): Chat
     messages(chatId: ID!): [Message]
@@ -127,9 +128,8 @@ const typeDefs = gql`
       socialCircle: String
       lookingFor: String
       basicInfo: [String]
-      proMember: Boolean #attendedEvents: [ID]
-    ): #upcomingEvents: [ID]
-    User
+      proMember: Boolean #attendedEvents: [ID] #upcomingEvents: [ID]
+    ): User
 
     deleteUser(id: ID!): User
 
