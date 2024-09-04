@@ -127,10 +127,10 @@ const typeDefs = gql`
       socialCircle: String
       lookingFor: String
       basicInfo: [String]
-      proMember: Boolean
-    ): #attendedEvents: [ID]
-    #upcomingEvents: [ID]
+      proMember: Boolean #attendedEvents: [ID]
+    ): #upcomingEvents: [ID]
     User
+
     deleteUser(id: ID!): User
 
     # event

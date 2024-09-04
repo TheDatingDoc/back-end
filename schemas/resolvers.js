@@ -100,7 +100,13 @@ const resolvers = {
         throw new GraphQLError("You can only delete your own profile!");
       }
       const deleteUser = await User.findByIdAndDelete(id);
-      return deleteUser;
+      if (!deleteUser) {
+        throw new GraphQLError("User not found or already deleted.");
+      }
+      return {
+        id: deleteUser._id,
+        email: deleteUser.email,
+      };
     },
     //---------------------- purchase ticket ----------------------//
     purchaseTicket: async (_, { eventId, ticketType }, { user }) => {
@@ -122,6 +128,10 @@ const resolvers = {
       } else {
         throw new Error("Tickets are sold out!");
       }
+      // add the event to user's upcoming events
+      user.upcomingEvents.push(event._id);
+      await user.save();
+      // add the user to the event's attendees
       event.attendees.push(user._id);
       await event.save();
       return event;
