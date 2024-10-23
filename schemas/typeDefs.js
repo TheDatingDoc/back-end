@@ -7,6 +7,7 @@ const typeDefs = gql`
     name: String!
     email: String!
     password: String!
+    birthday: String!
     city: String!
     state: String!
     jobTitle: String
@@ -101,6 +102,7 @@ const typeDefs = gql`
       name: String!
       email: String!
       password: String!
+      birthday: String!
       city: String
       state: String!
       gender: String!
@@ -112,6 +114,7 @@ const typeDefs = gql`
       name: String
       email: String
       password: String
+      birthday: String
       city: String
       state: String
       jobTitle: String

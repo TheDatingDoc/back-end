@@ -65,6 +65,7 @@ const resolvers = {
         name,
         email,
         password,
+        birthday,
         city,
         state,
         gender,
