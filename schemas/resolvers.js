@@ -59,18 +59,13 @@ const resolvers = {
     //---------------------- add user ----------------------//
     addUser: async (
       _,
-      { name, email, password, city, state, gender, interestedIn, profileImage }
+      { name, email, password }
     ) => {
       const user = await User.create({
         name,
         email,
         password,
-        birthday,
-        city,
-        state,
-        gender,
-        interestedIn,
-        profileImage,
+        
       });
       console.log(user);
       const token = signToken(user);

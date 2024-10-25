@@ -102,12 +102,6 @@ const typeDefs = gql`
       name: String!
       email: String!
       password: String!
-      birthday: String!
-      city: String
-      state: String!
-      gender: String!
-      interestedIn: String!
-      profileImage: String!
     ): Auth
     login(email: String!, password: String!): Auth
     updateUser(
