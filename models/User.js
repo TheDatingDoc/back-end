@@ -17,6 +17,10 @@ const userSchema = new Schema(
       required: true,
       minlength: 8,
     },
+    birthday: {
+      type: String,
+      required: true,
+    },
     city: {
       type: String,
       required: true,

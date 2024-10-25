@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 
 mongoose.connect(
-  process.env.MONGODB_URI || "mongodb://localhost/the-dating-doc-backend"
+  process.env.MONGODB_URI, 
+  { useNewUrlParser: true, useUnifiedTopology: true }
 );
 
 module.exports = mongoose.connection;
